@@ -6,8 +6,9 @@
     "eligibility": "Private limited company, LLP, or registered partnership; entity age up to 10 years; turnover up to Rs 100 crore; working towards innovation, development or improvement of products/processes/services; scalable business model with high employment generation or wealth creation potential",
     "benefit": "Self-certification for 6 labour and 3 environmental laws; tax exemption under Section 80-IAC for 3 consecutive years; fast-track patent application with 80% rebate; access to Fund of Funds; credit guarantee scheme; exemption from prior experience/turnover in government tenders",
     "max_amount": "Not applicable (recognition certificate)",
-    "entity_age_limit": "10 years from incorporation/registration",
-    "deadline": "Open (continuous application)"
+    "entity_age_limit": "10 years from incorporation date",
+    "deadline": "Open (continuous application)",
+    "source_url": "https://www.startupindia.gov.in/content/sih/en/startup-scheme.html"
   },
   {
     "id": "002",
@@ -17,7 +18,8 @@
     "benefit": "Up to Rs 20 lakh as grant for proof of concept, prototype development, or product trials; up to Rs 50 lakh as debt/convertible debentures for market entry, commercialization, or scaling; disbursed through approved incubators",
     "max_amount": "Rs 50 lakh (Rs 20 lakh grant + Rs 30 lakh debt/convertible)",
     "entity_age_limit": "2 years from DPIIT recognition",
-    "deadline": "Open (continuous application through incubators)"
+    "deadline": "Open (continuous application through incubators)",
+    "source_url": "https://www.startupindia.gov.in/content/sih/en/seed-fund-scheme.html"
   },
   {
     "id": "003",
@@ -27,7 +29,8 @@
     "benefit": "100% deduction of profits and gains for 3 consecutive assessment years out of 10 years from incorporation; effectively zero tax on profits for 3 years",
     "max_amount": "No upper limit (100% of profits for 3 years)",
     "entity_age_limit": "Must claim within 10 years of incorporation; 3 consecutive years benefit",
-    "deadline": "Must be incorporated after 1 April 2016; claim within 10 years"
+    "deadline": "Must be incorporated after 1 April 2016; claim within 10 years",
+    "source_url": "https://www.startupindia.gov.in/content/sih/en/80iac-tax-exemption.html"
   },
   {
     "id": "004",
@@ -37,7 +40,8 @@
     "benefit": "Government contributes up to Rs 10,000 crore to SEBI-registered AIFs; AIFs invest 2x in startups; provides equity/quasi-equity funding at various stages",
     "max_amount": "Depends on AIF investment (typically Rs 50 lakh to several crores)",
     "entity_age_limit": "No specific limit (depends on AIF criteria)",
-    "deadline": "Open (through AIFs)"
+    "deadline": "Open (through AIFs)",
+    "source_url": "https://www.startupindia.gov.in/content/sih/en/fund-of-funds.html"
   },
   {
     "id": "005",
@@ -47,6 +51,7 @@
     "benefit": "Credit guarantee up to 80% of loan amount (max Rs 10 crore); enables collateral-free loans up to Rs 10 crore; guarantee fee 0.5% per annum",
     "max_amount": "Rs 10 crore guarantee coverage",
     "entity_age_limit": "No specific limit",
-    "deadline": "Open (through lending institutions)"
+    "deadline": "Open (through lending institutions)",
+    "source_url": "https://www.startupindia.gov.in/content/sih/en/credit-guarantee-scheme.html"
   }
 ]
