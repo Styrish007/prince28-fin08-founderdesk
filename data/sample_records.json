@@ -6,7 +6,7 @@
     "eligibility": "Private limited company, LLP, or registered partnership; entity age up to 10 years; turnover up to Rs 100 crore; working towards innovation, development or improvement of products/processes/services; scalable business model with high employment generation or wealth creation potential",
     "benefit": "Self-certification for 6 labour and 3 environmental laws; tax exemption under Section 80-IAC for 3 consecutive years; fast-track patent application with 80% rebate; access to Fund of Funds; credit guarantee scheme; exemption from prior experience/turnover in government tenders",
     "max_amount": "Not applicable (recognition certificate)",
-    "entity_age_limit": "10 years from incorporation date",
+    "entity_age_limit": "10 years from incorporation/registration",
     "deadline": "Open (continuous application)",
     "source_url": "https://www.startupindia.gov.in/content/sih/en/startup-scheme.html"
   },
@@ -53,5 +53,170 @@
     "entity_age_limit": "No specific limit",
     "deadline": "Open (through lending institutions)",
     "source_url": "https://www.startupindia.gov.in/content/sih/en/credit-guarantee-scheme.html"
+  },
+  {
+    "id": "006",
+    "scheme": "Startup India Patent Fee Rebate (80% Rebate)",
+    "authority": "DPIIT, Government of India",
+    "eligibility": "DPIIT-recognized startup; patent application filed by startup",
+    "benefit": "80% rebate on patent filing fees; fast-track examination; panel of facilitators for IP applications",
+    "max_amount": "80% of patent filing fees",
+    "entity_age_limit": "10 years from incorporation (DPIIT recognition eligibility)",
+    "deadline": "Open (continuous)",
+    "source_url": "https://www.startupindia.gov.in/content/sih/en/patent-fee-rebate.html"
+  },
+  {
+    "id": "007",
+    "scheme": "Income Tax Exemption under Section 56(2)(viib) - Angel Tax Exemption",
+    "authority": "Income Tax Department, Government of India",
+    "eligibility": "DPIIT-recognized startup; paid-up share capital and share premium not exceeding Rs 25 crore; not invested in land, building, loans, shares, jewellery, etc.",
+    "benefit": "Exemption from 'angel tax' on share premium received above fair market value; no tax on investment received from eligible investors",
+    "max_amount": "No upper limit (exemption on full share premium)",
+    "entity_age_limit": "10 years from incorporation",
+    "deadline": "Open (continuous application via DPIIT portal)",
+    "source_url": "https://www.startupindia.gov.in/content/sih/en/angel-tax-exemption.html"
+  },
+  {
+    "id": "008",
+    "scheme": "Startup India Public Procurement Relaxation",
+    "authority": "DPIIT, Government of India",
+    "eligibility": "DPIIT-recognized startup",
+    "benefit": "Exemption from prior turnover and prior experience requirements in government tenders; can bid on GeM portal; relaxation in EMD and performance security",
+    "max_amount": "Not applicable (procurement benefit)",
+    "entity_age_limit": "10 years from incorporation",
+    "deadline": "Open (continuous)",
+    "source_url": "https://www.startupindia.gov.in/content/sih/en/public-procurement.html"
+  },
+  {
+    "id": "009",
+    "scheme": "Startup India Fast-track Winding Up",
+    "authority": "Ministry of Corporate Affairs, Government of India",
+    "eligibility": "DPIIT-recognized startup",
+    "benefit": "Voluntary winding up within 90 days under Insolvency and Bankruptcy Code; simplified exit process; lower compliance burden",
+    "max_amount": "Not applicable (regulatory benefit)",
+    "entity_age_limit": "10 years from incorporation",
+    "deadline": "Open (continuous)",
+    "source_url": "https://www.startupindia.gov.in/content/sih/en/fast-track-winding-up.html"
+  },
+  {
+    "id": "010",
+    "scheme": "TANSEED - Tamil Nadu Startup Seed Fund",
+    "authority": "StartupTN (Tamil Nadu Startup and Innovation Mission), Government of Tamil Nadu",
+    "eligibility": "DPIIT-recognized startup; registered in Tamil Nadu; listed on StartupTN portal; early-stage startup; not formed by splitting/reconstruction of existing business; from 5th edition: 3% equity stake taken by StartupTN",
+    "benefit": "Up to Rs 15 lakh for green tech, rural impact, women-led startups; up to Rs 10 lakh for other sectors; 1-year accelerator with mentorship; 25% reservation for women-led startups",
+    "max_amount": "Rs 15 lakh (green tech/rural/women) / Rs 10 lakh (others)",
+    "entity_age_limit": "Early stage (typically under 3-5 years)",
+    "deadline": "Periodic rounds (e.g., TANSEED 8.0: Dec 6-20, 2025)",
+    "source_url": "https://startuptn.in/tanseed"
+  },
+  {
+    "id": "011",
+    "scheme": "TN SC/ST Startup Fund",
+    "authority": "StartupTN, Government of Tamil Nadu",
+    "eligibility": "Startup founded solely by SC/ST entrepreneurs; registered in Tamil Nadu; DPIIT recognition; listed on StartupTN",
+    "benefit": "Equity or debt-based investments; up to Rs 56.63 crore sanctioned across 41 startups (as of 2023-24); promotes inclusive entrepreneurship",
+    "max_amount": "Varies (equity/debt investment up to Rs 50+ lakh per startup)",
+    "entity_age_limit": "No specific limit",
+    "deadline": "Open (continuous application through StartupTN)",
+    "source_url": "https://startuptn.in/sc-st-startup-fund"
+  },
+  {
+    "id": "012",
+    "scheme": "Tamil Nadu Emerging Sector Seed Fund",
+    "authority": "StartupTN, Government of Tamil Nadu",
+    "eligibility": "DPIIT-recognized startup in emerging sectors (deep tech, space, AI, biotech, etc.); registered in Tamil Nadu; listed on StartupTN",
+    "benefit": "Seed funding for emerging technology sectors; complements TANSEED for specialized domains",
+    "max_amount": "Not publicly specified",
+    "entity_age_limit": "Early stage",
+    "deadline": "Open (through StartupTN portal)",
+    "source_url": "https://startuptn.in/emerging-sector-seed-fund"
+  },
+  {
+    "id": "013",
+    "scheme": "Tamil Nadu Space Tech Fund",
+    "authority": "StartupTN / TANSIM, Government of Tamil Nadu",
+    "eligibility": "DPIIT-recognized startup in space technology; registered in Tamil Nadu; proven concept; secured third-party funding",
+    "benefit": "Up to Rs 50 lakh in matching grants or equity; supports satellite systems, launch vehicles, space robotics, debris mitigation, downstream data applications",
+    "max_amount": "Rs 50 lakh",
+    "entity_age_limit": "No specific limit",
+    "deadline": "Open (through StartupTN portal)",
+    "source_url": "https://startuptn.in/space-tech-fund"
+  },
+  {
+    "id": "014",
+    "scheme": "TANSCALE - Tamil Nadu Scale-up Fund",
+    "authority": "StartupTN, Government of Tamil Nadu",
+    "eligibility": "Growth-stage startup; registered in Tamil Nadu; DPIIT recognition; private co-investment required",
+    "benefit": "Government invests up to Rs 50 lakh in association with private investment agencies; 10 growth-stage startups per year",
+    "max_amount": "Rs 50 lakh (with private co-investment)",
+    "entity_age_limit": "Growth stage",
+    "deadline": "Open (through StartupTN portal)",
+    "source_url": "https://startuptn.in/tanscale"
+  },
+  {
+    "id": "015",
+    "scheme": "Innovation Voucher Program (Tamil Nadu)",
+    "authority": "StartupTN, Government of Tamil Nadu",
+    "eligibility": "Early-stage startup registered in Tamil Nadu; DPIIT recognition; listed on StartupTN",
+    "benefit": "Vouchers for accessing incubation services, mentoring, testing facilities, and technical expertise from empanelled service providers",
+    "max_amount": "Not publicly specified (voucher-based)",
+    "entity_age_limit": "Early stage",
+    "deadline": "Open (through StartupTN portal)",
+    "source_url": "https://startuptn.in/innovation-voucher-program"
+  },
+  {
+    "id": "016",
+    "scheme": "StartupTN MentorTN Portal",
+    "authority": "StartupTN, Government of Tamil Nadu",
+    "eligibility": "Any startup registered on StartupTN portal",
+    "benefit": "Connect with 257+ experienced mentors across sectors; guidance on product, strategy, fundraising, scaling; 733+ startups already connected",
+    "max_amount": "Not applicable (mentorship service)",
+    "entity_age_limit": "No limit",
+    "deadline": "Open (continuous via StartupTN portal)",
+    "source_url": "https://mentortn.startuptn.in"
+  },
+  {
+    "id": "017",
+    "scheme": "AngelsTN - Angel Investor Platform",
+    "authority": "StartupTN, Government of Tamil Nadu",
+    "eligibility": "Startups seeking angel investment; investors wanting to invest in TN startups",
+    "benefit": "Platform connecting Tamil Nadu startups with angel investors; education for aspiring investors; enables emerging angel networks across state",
+    "max_amount": "Not applicable (matchmaking platform)",
+    "entity_age_limit": "No limit",
+    "deadline": "Open (continuous via StartupTN portal)",
+    "source_url": "https://startuptn.in/angelstn"
+  },
+  {
+    "id": "018",
+    "scheme": "TANFUND - Global Funding Connect",
+    "authority": "StartupTN, Government of Tamil Nadu",
+    "eligibility": "Tamil Nadu-based startups seeking funding",
+    "benefit": "Platform connecting TN founders with funding agencies worldwide; access to global investors and funds",
+    "max_amount": "Not applicable (platform/service)",
+    "entity_age_limit": "No limit",
+    "deadline": "Open (continuous via StartupTN portal)",
+    "source_url": "https://startuptn.in/tanfund"
+  },
+  {
+    "id": "019",
+    "scheme": "Scale-up Incubators Program (Tamil Nadu)",
+    "authority": "StartupTN, Government of Tamil Nadu",
+    "eligibility": "Incubators in Tamil Nadu",
+    "benefit": "Workshops, grants, and global best practices for incubators; enhances incubator sustainability and effectiveness; 124+ incubators across state",
+    "max_amount": "Not publicly specified (grants to incubators)",
+    "entity_age_limit": "Not applicable (for incubators)",
+    "deadline": "Open (through StartupTN portal)",
+    "source_url": "https://startuptn.in/scaleup-incubators"
+  },
+  {
+    "id": "020",
+    "scheme": "Startup Thamizha - TV Reality Show",
+    "authority": "StartupTN, Government of Tamil Nadu",
+    "eligibility": "Tamil Nadu-based startups; DPIIT recognition preferred",
+    "benefit": "Television exposure on national/regional channels; awareness raising; investor visibility; prizes and recognition for winners",
+    "max_amount": "Not applicable (media exposure)",
+    "entity_age_limit": "No limit",
+    "deadline": "Seasonal (application windows announced periodically)",
+    "source_url": "https://startuptn.in/startup-thamizha"
   }
 ]
