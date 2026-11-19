@@ -88,6 +88,15 @@ def test_loader_is_idempotent(database_url, tmp_path):
     engine = make_engine(settings)
     make_sessionmaker(engine)
 
+    # Clear the database first (seeded fixture may have populated it)
+    async def clear_db():
+        async with make_sessionmaker(engine)() as session, session.begin():
+            from sqlalchemy import text
+
+            await session.execute(text("DELETE FROM documents"))
+
+    asyncio.run(clear_db())
+
     async def run_load():
         proc = await asyncio.create_subprocess_exec(
             sys.executable,
@@ -110,4 +119,4 @@ def test_loader_is_idempotent(database_url, tmp_path):
     out2 = asyncio.run(run_load())
     assert "inserted=3" in out1 and "updated=0" in out1
     assert "inserted=0" in out2 and "updated=0" in out2
-    await engine.dispose()
+    asyncio.run(engine.dispose())
