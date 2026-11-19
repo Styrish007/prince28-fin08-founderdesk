@@ -29,21 +29,14 @@ c1babe05b511 -> 41dbe4766b59 (head), add gin index on metadata
 ### The loader is idempotent
 
 ```
-run 1: paste here
-run 2: paste here
-run 3 (after editing one record): paste here
+run 1: records=5 inserted=5 updated=0 unchanged=0
+run 2: records=5 inserted=0 updated=0 unchanged=5
+run 3: records=5 inserted=0 updated=1 unchanged=4
 ```
-
-```
-records=5 inserted=5 updated=0 unchanged=0
-records=5 inserted=0 updated=0 unchanged=5
-records=5 inserted=0 updated=1 unchanged=4
 ```
 
 ### EXPLAIN for ?scheme=DPIIT Startup Recognition
 
-```
-paste the output of: uv run python scripts/explain.py scheme VALUE
 ```
 
 ```
