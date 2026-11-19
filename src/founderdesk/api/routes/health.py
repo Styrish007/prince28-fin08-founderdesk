@@ -2,11 +2,11 @@ from fastapi import APIRouter, Response
 
 from founderdesk.api.deps import DbCheckDep, SettingsDep
 
-router = APIRouter(tags=["liveness"])
+router = APIRouter(tags=["health"])
 
 
-@router.get("/liveness")
-def liveness(settings: SettingsDep) -> dict[str, str]:
+@router.get("/health")
+def health(settings: SettingsDep) -> dict[str, str]:
     """Liveness: is the process alive? Instant. Never touches the DB or the LLM."""
     return {"status": "ok", "app": settings.app_name, "env": settings.app_env}
 
