@@ -10,6 +10,9 @@ __pycache__/
 !.env.example
 # Big data stays out of Git
 data/raw/
+# Test and coverage output
+.coverage
+htmlcov/
 # Editors / OS
 .vscode/
 .idea/
