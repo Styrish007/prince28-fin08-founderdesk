@@ -1,8 +1,14 @@
 # FounderDesk
 
+[![CI](https://github.com/Styrish007/prince28-fin08-founderdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Styrish007/prince28-fin08-founderdesk/actions/workflows/ci.yml)
+[![Live](https://img.shields.io/website?url=https%3A%2F%2Ffounderdesk-noxl.onrender.com%2Fhealth&label=live)](https://founderdesk-noxl.onrender.com/docs)
+[![Uptime (30 days)](https://img.shields.io/uptimerobot/ratio/m804745953-754aefb12be12da41570469a)](https://founderdesk-noxl.onrender.com/health)
+
+**Live:** https://founderdesk-noxl.onrender.com · [API docs](https://founderdesk-noxl.onrender.com/docs) · [health](https://founderdesk-noxl.onrender.com/health)
+
 Guides student founders through startup recognition, tax benefits and seed-funding schemes (Startup India and StartupTN), with eligibility checks.
 
-**Status:** Day 1 foundation (FastAPI skeleton, quality gates). Live URL from Day 5.
+**Status:** Week 1 complete · live at https://founderdesk-noxl.onrender.com.
 
 ## Who it's for
 
