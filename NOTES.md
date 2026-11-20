@@ -162,3 +162,39 @@ TOTAL                                 254     15     26      2    92%
 Two files or lines my coverage report says are never run, and whether they matter: (2 lines)
 
 `src/founderdesk/db/repository.py` lines 29-62 (filters and list methods) - only tested in integration tests with real DB, not in unit tests with fake repo. `src/founderdesk/api/middleware.py` lines 22-24 (exception handling) - only triggers on unhandled exceptions which unit tests don't trigger.
+
+
+
+
+## D05 · CI/CD and going live
+
+- **Live URL:** https://founderdesk-noxl.onrender.com
+- **CI run for pull request 1:** https://github.com/Styrish007/prince28-fin08-founderdesk/actions (replace with the specific successful CI run link)
+- **First deploy that ran by itself:** (paste the successful CD run link)
+
+- **Merge clicked at:** __:__ → **"Smoke test passed" at:** __:__ → **Lead time:** ___ min
+
+### Smoke test output from that CD run
+
+```text
+(paste the last 4 lines of the "Smoke test the live URL" step)
+```
+
+### Rollback drill
+
+- Rolled back to SHA `abaa01f420cfa839caf0bb445659e190af263d3e`: smoke passed in **2 seconds**.
+- Rolled forward to SHA `44e36de86a225202ab645521ee4304c2b5fcd576`: completed in **10 seconds**.
+
+- **During the rollback, the database stayed on the newer schema. Why is that safe here?**
+
+  The rollback deploys an older application image without reversing database migrations. This is safe when the older application version remains compatible with the newer database schema (backward-compatible, expand-and-contract migrations).
+
+### Where my secrets live
+
+- Neon string: GitHub Secret `DATABASE_URL` + Render environment. Not in Git, not in the image.
+- Render deploy hook: GitHub Secret `RENDER_DEPLOY_HOOK` only.
+
+### Monitoring
+
+- UptimeRobot checks `/health` every 5 minutes; alerts go to my email.
+- **One thing that would make my live app faster on its first request:** Upgrade to an always-on paid Render instance to avoid free-instance spin-down and cold starts.

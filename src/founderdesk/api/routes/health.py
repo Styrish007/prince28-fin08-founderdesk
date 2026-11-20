@@ -6,13 +6,14 @@ router = APIRouter(tags=["health"])
 
 
 @router.get("/health")
+@router.head("/health", include_in_schema=False)
 def health(settings: SettingsDep) -> dict[str, str]:
     """Liveness: is the process alive? Instant. Never touches the DB or the LLM."""
     return {
         "status": "ok",
         "app": settings.app_name,
         "env": settings.app_env,
-        "version": settings.git_sha,  # which commit is live: the smoke test checks this
+        "version": settings.git_sha,
     }
 
 
