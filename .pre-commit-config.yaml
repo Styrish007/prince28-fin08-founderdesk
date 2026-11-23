@@ -20,5 +20,6 @@ repos:
     rev: v1.5.0
     hooks:
       - id: detect-secrets
-        # uv.lock hashes and Alembic revision ids look random but are not secrets
-        exclude: ^(uv\.lock|migrations/versions/.*)$
+        # uv.lock hashes, Alembic revision ids, and manifest sha256 fingerprints
+        # look random but are not secrets
+        exclude: ^(uv\.lock|migrations/versions/.*|data/manifest\.jsonl)$
