@@ -228,9 +228,9 @@ Two files or lines my coverage report says are never run, and whether they matte
 
 ### Capacity (from docs/CAPACITY.md)
 
-- Tokens per page, measured: ___
-- Full corpus: ___ M tokens, ___ chunks, embedding about Rs ___, vectors ___ MB
-- The number that surprised me most, and why (2 lines): ___
+- Tokens per page, measured: ~7,000 (70,516 tokens ÷ 10 pages)
+- Full corpus: ~1.4 M tokens, 2,820 chunks, embedding about Rs 53,580, vectors 11 MB
+- The number that surprised me most, and why (2 lines): Embedding 200 documents costs ~Rs 53,580, which blows the Rs 0.50-per-question budget. That means I can't embed everything — I'll need selective embedding of the most relevant scheme documents only.
 
 ### One thing that went wrong today, and how I fixed it
 
