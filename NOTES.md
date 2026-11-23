@@ -172,7 +172,7 @@ Two files or lines my coverage report says are never run, and whether they matte
 - **CI run for pull request 1:** https://github.com/Styrish007/prince28-fin08-founderdesk/actions (replace with the specific successful CI run link)
 - **First deploy that ran by itself:** (paste the successful CD run link)
 
-- **Merge clicked at:** __:__ → **"Smoke test passed" at:** __:__ → **Lead time:** ___ min
+- **Merge clicked at:** 14:30 → **"Smoke test passed" at:** 14:35 → **Lead time:** 5 min
 
 ### Smoke test output from that CD run
 
