@@ -259,19 +259,25 @@ class Manifest:
         self._load()
         key = f"{record.source}\t{record.url}"
         self._entries[key] = record
-        append_manifest(
-            {
-                "url": record.url,
-                "source": record.source,
-                "licence": record.licence,
-                "title": record.title,
-                "path": record.path,
-                "sha256": record.sha256,
-                "size": record.size,
-                "fetched_at": record.fetched_at,
-                "status": record.status,
-            }
-        )
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with self.path.open("a", encoding="utf-8") as f:
+            f.write(
+                json.dumps(
+                    {
+                        "url": record.url,
+                        "source": record.source,
+                        "licence": record.licence,
+                        "title": record.title,
+                        "path": record.path,
+                        "sha256": record.sha256,
+                        "size": record.size,
+                        "fetched_at": record.fetched_at,
+                        "status": record.status,
+                    },
+                    ensure_ascii=False,
+                )
+                + "\n"
+            )
 
 
 async def fetch_one(
