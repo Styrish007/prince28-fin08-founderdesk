@@ -1,0 +1,25 @@
+# Sources for FounderDesk. One row per file to download. Lines starting with # are notes.
+# Start target: 10 documents covering DPIIT recognition, seed fund, tax benefits, and state startup policies
+# Where to look:
+#   https://www.startupindia.gov.in/
+#   https://startuptn.in/
+#   https://www.sidbi.in/
+#   https://en.wikipedia.org/wiki/Startup_India
+#   https://en.wikipedia.org/wiki/Make_in_India
+#   https://en.wikipedia.org/wiki/Stand-Up_India
+#   https://en.wikipedia.org/wiki/Digital_India
+#   https://en.wikipedia.org/wiki/Atmanirbhar_Bharat
+#   https://en.wikipedia.org/wiki/Pradhan_Mantri_Mudra_Yojana
+#   https://en.wikipedia.org/wiki/Skill_India
+# Terms on my project card: Government of India portals (public schemes); Wikipedia (CC BY-SA 4.0, attribution required)
+url,source,licence,title
+https://www.startupindia.gov.in/,startup-india,"Government of India portal - public scheme information; reproduce with attribution",Startup India portal
+https://startuptn.in/,startuptn,"Government of Tamil Nadu portal - public scheme information; reproduce with attribution",StartupTN portal
+https://www.sidbi.in/,sidbi,"Government of India institution - public information; reproduce with attribution",SIDBI homepage
+https://en.wikipedia.org/wiki/Startup_India,wikipedia,"CC BY-SA 4.0",Startup India (Wikipedia)
+https://en.wikipedia.org/wiki/Make_in_India,wikipedia,"CC BY-SA 4.0",Make in India (Wikipedia)
+https://en.wikipedia.org/wiki/Stand-Up_India,wikipedia,"CC BY-SA 4.0",Stand-Up India (Wikipedia)
+https://en.wikipedia.org/wiki/Digital_India,wikipedia,"CC BY-SA 4.0",Digital India (Wikipedia)
+https://en.wikipedia.org/wiki/Atmanirbhar_Bharat,wikipedia,"CC BY-SA 4.0",Atmanirbhar Bharat (Wikipedia)
+https://en.wikipedia.org/wiki/Pradhan_Mantri_Mudra_Yojana,wikipedia,"CC BY-SA 4.0",Pradhan Mantri Mudra Yojana (Wikipedia)
+https://en.wikipedia.org/wiki/Skill_India,wikipedia,"CC BY-SA 4.0",Skill India (Wikipedia)

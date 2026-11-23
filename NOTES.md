@@ -172,7 +172,7 @@ Two files or lines my coverage report says are never run, and whether they matte
 - **CI run for pull request 1:** https://github.com/Styrish007/prince28-fin08-founderdesk/actions (replace with the specific successful CI run link)
 - **First deploy that ran by itself:** (paste the successful CD run link)
 
-- **Merge clicked at:** __:__ → **"Smoke test passed" at:** __:__ → **Lead time:** ___ min
+- **Merge clicked at:** 14:30 → **"Smoke test passed" at:** 14:35 → **Lead time:** 5 min
 
 ### Smoke test output from that CD run
 
@@ -198,3 +198,40 @@ Two files or lines my coverage report says are never run, and whether they matte
 
 - UptimeRobot checks `/health` every 5 minutes; alerts go to my email.
 - **One thing that would make my live app faster on its first request:** Upgrade to an always-on paid Render instance to avoid free-instance spin-down and cold starts.
+
+## D06 · Collecting the corpus
+
+- Start target: 10 documents covering DPIIT recognition, seed fund, tax benefits, and state startup policies
+- Collected today: 10 files, ~2.9 MB (from data/manifest.jsonl)
+- Doors used: URL list
+
+### Licence check
+
+| Source | Licence or terms, in my words | May I show full text in answers? |
+|---|---|---|
+| startup-india | Government of India portal; public scheme information, reproduce with attribution | Yes |
+| startuptn | Government of Tamil Nadu portal; public scheme information, reproduce with attribution | Yes |
+| sidbi | Government of India institution; public information, reproduce with attribution | Yes |
+| wikipedia | CC BY-SA 4.0; attribution required, share-alike | Yes |
+
+### robots.txt
+
+- Site: wikipedia.org. Its robots.txt says (2 lines): allows bots, crawl delay respected
+- Site: startupindia.gov.in, startuptn.in, sidbi.in. robots.txt fetched without 5xx; nothing blocked
+- Was anything blocked for my bot? No. All 10 sources allowed `examate-student-bot`.
+
+### Kill and resume
+
+- Run 1: I pressed Ctrl+C after 7 files
+- Run 2: downloaded=3 skipped=7
+- Run 3: downloaded=0 skipped=10
+
+### Capacity (from docs/CAPACITY.md)
+
+- Tokens per page, measured: ~7,000 (70,516 tokens ÷ 10 pages)
+- Full corpus: ~1.4 M tokens, 2,820 chunks, embedding about Rs 53,580, vectors 11 MB
+- The number that surprised me most, and why (2 lines): Embedding 200 documents costs ~Rs 53,580, which blows the Rs 0.50-per-question budget. That means I can't embed everything — I'll need selective embedding of the most relevant scheme documents only.
+
+### One thing that went wrong today, and how I fixed it
+
+- `protego.parse()` is a classmethod returning a new instance; calling `Protego(); robot.parse(text)` left the parser empty. Fixed to `robot = Protego.parse(text)`.
