@@ -202,7 +202,7 @@ Two files or lines my coverage report says are never run, and whether they matte
 ## D06 · Collecting the corpus
 
 - Start target: 10 documents covering DPIIT recognition, seed fund, tax benefits, and state startup policies
-- Collected today: 10 files, ~2.9 MB (from data/manifest.jsonl)
+- Collected today: 10 files, ~7.7 MB (from data/manifest.jsonl)
 - Doors used: URL list
 
 ### Licence check
@@ -211,13 +211,18 @@ Two files or lines my coverage report says are never run, and whether they matte
 |---|---|---|
 | startup-india | Government of India portal; public scheme information, reproduce with attribution | Yes |
 | startuptn | Government of Tamil Nadu portal; public scheme information, reproduce with attribution | Yes |
-| sidbi | Government of India institution; public information, reproduce with attribution | Yes |
-| wikipedia | CC BY-SA 4.0; attribution required, share-alike | Yes |
+| startuptn-policy | Government of Tamil Nadu - Tamil Nadu Startup and Innovation Policy 2023 PDF | Yes |
+| startup-india-faqs | Government of India - Startup India FAQs page | Yes |
+| startup-india-state-policies | Government of India - State/UT startup policies page | Yes |
+| startup-india-self-cert | Government of India - DPIIT self-certification page | Yes |
+| startup-india-recognition | Government of India - DPIIT recognition page | Yes |
+| startup-india-scheme | Government of India - Startup India scheme page | Yes |
+| startup-india-managing-business | Government of India - Building and managing a business page | Yes |
+| startup-india-knowledge-bank | Government of India - Startup Guidebook / knowledge bank | Yes |
 
 ### robots.txt
 
-- Site: wikipedia.org. Its robots.txt says (2 lines): allows bots, crawl delay respected
-- Site: startupindia.gov.in, startuptn.in, sidbi.in. robots.txt fetched without 5xx; nothing blocked
+- Site: startupindia.gov.in and startuptn.in. robots.txt fetched without 5xx; nothing blocked
 - Was anything blocked for my bot? No. All 10 sources allowed `examate-student-bot`.
 
 ### Kill and resume
@@ -228,9 +233,9 @@ Two files or lines my coverage report says are never run, and whether they matte
 
 ### Capacity (from docs/CAPACITY.md)
 
-- Tokens per page, measured: ~7,000 (70,516 tokens ÷ 10 pages)
-- Full corpus: ~1.4 M tokens, 2,820 chunks, embedding about Rs 53,580, vectors 11 MB
-- The number that surprised me most, and why (2 lines): Embedding 200 documents costs ~Rs 53,580, which blows the Rs 0.50-per-question budget. That means I can't embed everything — I'll need selective embedding of the most relevant scheme documents only.
+- Tokens per page, measured: ~4,623 (120,231 chars ÷ 4 ÷ 65 pages)
+- Full corpus: ~0.6 M tokens, 1,202 chunks, embedding about Rs 11, vectors 4.7 MB
+- The number that surprised me most, and why (2 lines): Embedding 200 documents costs only ~Rs 11 (per 1M tokens at $0.20), well within the Rs 0.50-per-question budget — selective embedding is not needed.
 
 ### One thing that went wrong today, and how I fixed it
 
