@@ -158,7 +158,8 @@ def build_capacity_table(
 
     full_tokens = int(full_chars // CHARS_PER_TOKEN)
     chunks = max(1, int(full_tokens / args.chunk_tokens))
-    embed_cost_usd = chunks * args.embed_usd
+    # Embedding priced per 1M tokens (not per chunk)
+    embed_cost_usd = (full_tokens / 1_000_000) * args.embed_usd_per_million
     embed_cost_inr = embed_cost_usd * args.usd_inr
     # rough vector size: dims * 4 bytes per chunk
     vectors_mb = chunks * args.dims * 4 / BYTES_PER_MB
@@ -178,7 +179,7 @@ def build_capacity_table(
     lines.append(f"- Chunks (at {args.chunk_tokens} tokens/chunk): {chunks:,}")
     lines.append(
         "- Embedding cost: "
-        f"{chunks:,} chunks × ${args.embed_usd} = ${embed_cost_usd:,.2f} "
+        f"{full_tokens:,} tokens ÷ 1M × ${args.embed_usd_per_million} = ${embed_cost_usd:,.2f} "
         f"≈ Rs {embed_cost_inr:,.0f} (at ₹{args.usd_inr}/$)"
     )
     lines.append(
@@ -194,7 +195,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--full-pages", type=int, help="Estimate full corpus size in pages")
     parser.add_argument("--full-files", type=int, help="Estimate full corpus size in files/records")
     parser.add_argument(
-        "--embed-usd", type=float, default=0.20, help="USD per 1000 chunks to embed"
+        "--embed-usd-per-million",
+        type=float,
+        default=0.20,
+        help="USD per 1M tokens to embed",
     )
     parser.add_argument("--dims", type=int, default=1024, help="Embedding dimensions")
     parser.add_argument("--chunk-tokens", type=int, default=500, help="Tokens per chunk")

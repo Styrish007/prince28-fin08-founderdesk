@@ -3,23 +3,23 @@
 # Where to look:
 #   https://www.startupindia.gov.in/
 #   https://startuptn.in/
-#   https://www.sidbi.in/
-#   https://en.wikipedia.org/wiki/Startup_India
-#   https://en.wikipedia.org/wiki/Make_in_India
-#   https://en.wikipedia.org/wiki/Stand-Up_India
-#   https://en.wikipedia.org/wiki/Digital_India
-#   https://en.wikipedia.org/wiki/Atmanirbhar_Bharat
-#   https://en.wikipedia.org/wiki/Pradhan_Mantri_Mudra_Yojana
-#   https://en.wikipedia.org/wiki/Skill_India
-# Terms on my project card: Government of India portals (public schemes); Wikipedia (CC BY-SA 4.0, attribution required)
+#   https://startuptn.in/pdf/Tamil-Nadu-Startup-and-Innovation-Policy-2023.pdf
+#   https://www.startupindia.gov.in/content/sih/en/faqs.html
+#   https://www.startupindia.gov.in/content/sih/en/state-startup-policies.html
+#   https://www.startupindia.gov.in/content/sih/en/startupgov/self-certification.html
+#   https://www.startupindia.gov.in/content/sih/en/recognition-page.html
+#   https://www.startupindia.gov.in/content/sih/en/startup-scheme.html
+#   https://www.startupindia.gov.in/content/sih/en/building-and-managing-a-business.html
+#   https://www.startupindia.gov.in/content/sih/en/reources/knowledge-bank.html
+# Terms on my project card: StartupTN Tamil Nadu Startup and Innovation Policy 2023 (PDF); Startup India portal + scheme pages
 url,source,licence,title
 https://www.startupindia.gov.in/,startup-india,"Government of India portal - public scheme information; reproduce with attribution",Startup India portal
 https://startuptn.in/,startuptn,"Government of Tamil Nadu portal - public scheme information; reproduce with attribution",StartupTN portal
-https://www.sidbi.in/,sidbi,"Government of India institution - public information; reproduce with attribution",SIDBI homepage
-https://en.wikipedia.org/wiki/Startup_India,wikipedia,"CC BY-SA 4.0",Startup India (Wikipedia)
-https://en.wikipedia.org/wiki/Make_in_India,wikipedia,"CC BY-SA 4.0",Make in India (Wikipedia)
-https://en.wikipedia.org/wiki/Stand-Up_India,wikipedia,"CC BY-SA 4.0",Stand-Up India (Wikipedia)
-https://en.wikipedia.org/wiki/Digital_India,wikipedia,"CC BY-SA 4.0",Digital India (Wikipedia)
-https://en.wikipedia.org/wiki/Atmanirbhar_Bharat,wikipedia,"CC BY-SA 4.0",Atmanirbhar Bharat (Wikipedia)
-https://en.wikipedia.org/wiki/Pradhan_Mantri_Mudra_Yojana,wikipedia,"CC BY-SA 4.0",Pradhan Mantri Mudra Yojana (Wikipedia)
-https://en.wikipedia.org/wiki/Skill_India,wikipedia,"CC BY-SA 4.0",Skill India (Wikipedia)
+https://startuptn.in/pdf/Tamil-Nadu-Startup-and-Innovation-Policy-2023.pdf,startuptn-policy,"Government of Tamil Nadu - Tamil Nadu Startup and Innovation Policy 2023 PDF",Tamil Nadu Startup and Innovation Policy 2023
+https://www.startupindia.gov.in/content/sih/en/faqs.html,startup-india-faqs,"Government of India - Startup India FAQs page",Startup India FAQs
+https://www.startupindia.gov.in/content/sih/en/state-startup-policies.html,startup-india-state-policies,"Government of India - State/UT startup policies page",State and UT Startup Policies
+https://www.startupindia.gov.in/content/sih/en/startupgov/self-certification.html,startup-india-self-cert,"Government of India - DPIIT self-certification page",DPIIT Self-Certification
+https://www.startupindia.gov.in/content/sih/en/recognition-page.html,startup-india-recognition,"Government of India - DPIIT recognition page",DPIIT Recognition
+https://www.startupindia.gov.in/content/sih/en/startup-scheme.html,startup-india-scheme,"Government of India - Startup India scheme page",Startup India Scheme
+https://www.startupindia.gov.in/content/sih/en/building-and-managing-a-business.html,startup-india-managing-business,"Government of India - Building and managing a business page",Building and Managing a Business
+https://www.startupindia.gov.in/content/sih/en/reources/knowledge-bank.html,startup-india-knowledge-bank,"Government of India - Startup Guidebook / knowledge bank",Startup Guidebook
