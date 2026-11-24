@@ -259,8 +259,8 @@ Two files or lines my coverage report says are never run, and whether they matte
 
 ### D07 · Parsing my corpus
 
-- Files in the manifest: 10 · parsed: 9 · failed: 0 · pages in Postgres: 69
-- Parsing coverage: 90% of files
+- Files in the manifest: 10 · parsed: 10 · failed: 0 · pages in Postgres: 72
+- Parsing coverage: 100% of files
 
 ### Failures by reason
 
@@ -268,7 +268,7 @@ Two files or lines my coverage report says are never run, and whether they matte
 |---|---|---|
 | | | |
 
-- The one I fixed: no failures to fix
+- The one I fixed: no failures — all 10 files parsed successfully
 
 ### What I saw when I read my parsed pages
 
@@ -283,4 +283,4 @@ Two files or lines my coverage report says are never run, and whether they matte
 
 ### One thing that went wrong today, and how I fixed it
 
-- One manifest row (startup-india-scheme/startup-scheme.html) points to a missing file on disk. The file wasn't re-downloaded after the Day 6 source change; running `uv run python scripts/fetch.py urls` again will restore it via resume.
+- One manifest row (startup-india-scheme/startup-scheme.html) pointed to a missing file on disk. Re-ran `uv run python scripts/fetch.py urls` which re-downloaded just that one file (resume-safe), then `uv run python scripts/parse_corpus.py` parsed it into Postgres with 3 pages. All 10 files are now parsed.
