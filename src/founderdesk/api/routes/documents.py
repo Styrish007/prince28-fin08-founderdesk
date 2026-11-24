@@ -33,3 +33,15 @@ async def get_document(doc_id: str, repo: RepoDep) -> dict:
     if record is None:
         raise HTTPException(status_code=404, detail=f"No document with id '{doc_id}'.")
     return record
+
+
+@router.get("/{doc_id}/pages")
+async def get_document_page(
+    doc_id: str,
+    page_no: Annotated[int, Query(ge=1)],
+    repo: RepoDep,
+) -> dict:
+    page = await repo.get_page(doc_id, page_no)
+    if page is None:
+        raise HTTPException(status_code=404, detail=f"No page {page_no} for document '{doc_id}'.")
+    return page

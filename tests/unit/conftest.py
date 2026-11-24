@@ -7,9 +7,34 @@ from founderdesk.config import Settings
 
 # Tiny fake records: unit tests never touch a real database or your data file.
 SAMPLE = [
-    {"id": "001", "title": "Alpha guideline", "year": 2023, "kind": "guideline"},
-    {"id": "002", "title": "Beta circular", "year": 2024, "kind": "circular"},
-    {"id": "003", "title": "Gamma notice", "year": 2025, "kind": "circular"},
+    {
+        "id": "001",
+        "title": "Alpha guideline",
+        "year": 2023,
+        "kind": "guideline",
+        "pages": [
+            {"page_no": 1, "text": "# Alpha\n\nGuideline content here.", "headings": ["Alpha"]},
+            {"page_no": 2, "text": "More content on page 2.", "headings": ["Alpha", "Section 2"]},
+        ],
+    },
+    {
+        "id": "002",
+        "title": "Beta circular",
+        "year": 2024,
+        "kind": "circular",
+        "pages": [
+            {"page_no": 1, "text": "# Beta\n\nCircular content.", "headings": ["Beta"]},
+        ],
+    },
+    {
+        "id": "003",
+        "title": "Gamma notice",
+        "year": 2025,
+        "kind": "circular",
+        "pages": [
+            {"page_no": 1, "text": "# Gamma\n\nNotice content.", "headings": ["Gamma"]},
+        ],
+    },
 ]
 
 
@@ -30,6 +55,13 @@ class FakeRepo:
 
     async def get(self, external_id):
         return next((r for r in self.rows if r["id"] == external_id), None)
+
+    async def get_page(self, external_id, page_no):
+        doc = next((r for r in self.rows if r["id"] == external_id), None)
+        if doc is None:
+            return None
+        pages = doc.get("pages", [])
+        return next((p for p in pages if p["page_no"] == page_no), None)
 
 
 @pytest.fixture

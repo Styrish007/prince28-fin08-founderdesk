@@ -6,7 +6,7 @@ from typing import Any
 from sqlalchemy import Text, cast, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from founderdesk.db.models import Document
+from founderdesk.db.models import Document, Page
 
 FILTER_KEY = re.compile(r"^[a-z_][a-z0-9_]{0,40}$")
 
@@ -64,3 +64,15 @@ class DocumentRepository:
     async def get(self, external_id: str) -> dict[str, Any] | None:
         doc = await self.session.scalar(select(Document).where(Document.external_id == external_id))
         return to_dict(doc) if doc else None
+
+    async def get_page(self, external_id: str, page_no: int) -> dict[str, Any] | None:
+        """Get a specific page of a document by external_id and page number."""
+        doc = await self.session.scalar(select(Document).where(Document.external_id == external_id))
+        if doc is None:
+            return None
+        page = await self.session.scalar(
+            select(Page).where(Page.document_id == doc.id, Page.page_no == page_no)
+        )
+        if page is None:
+            return None
+        return {"page_no": page.page_no, "text": page.text, "headings": page.headings}

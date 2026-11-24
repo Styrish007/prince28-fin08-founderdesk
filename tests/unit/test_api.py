@@ -59,6 +59,28 @@ def test_get_document_found(client):
     assert r.json()["title"] == "Alpha guideline"
 
 
+def test_get_document_page_found(client):
+    r = client.get("/v1/documents/001/pages", params={"page_no": 2})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["page_no"] == 2
+    assert body["text"] == "More content on page 2."
+    assert body["headings"] == ["Alpha", "Section 2"]
+
+
+def test_missing_document_page_is_problem_details(client):
+    r = client.get("/v1/documents/001/pages", params={"page_no": 99})
+    assert r.status_code == 404
+    assert r.headers["content-type"] == "application/problem+json"
+    assert r.json()["request_id"] == r.headers["X-Request-ID"]
+
+
+def test_missing_document_page_is_404(client):
+    r = client.get("/v1/documents/999/pages", params={"page_no": 1})
+    assert r.status_code == 404
+    assert r.headers["content-type"] == "application/problem+json"
+
+
 def test_missing_document_is_problem_details(client):
     r = client.get("/v1/documents/999")
     assert r.status_code == 404
