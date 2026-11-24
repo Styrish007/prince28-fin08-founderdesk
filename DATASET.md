@@ -46,3 +46,8 @@ StartupTN Tamil Nadu Startup and Innovation Policy 2023 (PDF); Startup India sch
 
 - Only 10 of the 200-document full target collected today; the rest will be downloaded over the coming week (the fetcher resumes where it stopped).
 - Tamil Nadu Startup and Innovation Policy 2023 PDF captured; other state scheme PDFs may need door 4 (by hand) if the portal blocks bots.
+
+## Parsing coverage
+
+Parsed documents ÷ (parsed + failed): 10 ÷ (10 + 0) = 100% of files
+Parsed pages ÷ (parsed + failed): 77 ÷ (77 + 0) = 100% of pages
