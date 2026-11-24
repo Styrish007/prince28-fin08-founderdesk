@@ -240,3 +240,47 @@ Two files or lines my coverage report says are never run, and whether they matte
 ### One thing that went wrong today, and how I fixed it
 
 - `protego.parse()` is a classmethod returning a new instance; calling `Protego(); robot.parse(text)` left the parser empty. Fixed to `robot = Protego.parse(text)`.
+
+## D07 · Parser comparison
+
+<!-- parsers:start -->
+| File | Parsers (A / B) | Pages | A found | B found | Time (A / B) | Better, why |
+|---|---|---|---|---|---|---|
+| faqs.html | trafilatura / strip tags | 6 | 15,818 chars, 0 headings, 0 tables | 25,812 chars, 0 headings, 0 tables | 0.21 s / 0.01 s | |
+| Tamil-Nadu-Startup-and-Innovation-Policy-2023.pd | PyMuPDF / pypdf | 56 | 78,068 chars, 208 headings, 4 tables | 99,300 chars, 0 headings, 0 tables | 4.59 s / 0.84 s | |
+| index.html | trafilatura / strip tags | 1 | 46 chars, 0 headings, 0 tables | 56 chars, 0 headings, 0 tables | 0.00 s / 0.00 s | |
+| index.html | trafilatura / strip tags | 4 | 9,319 chars, 2 headings, 0 tables | 22,503 chars, 0 headings, 0 tables | 0.19 s / 0.01 s | |
+| state-startup-policies.html | trafilatura / strip tags | 1 | 1,628 chars, 0 headings, 0 tables | 7,593 chars, 0 headings, 0 tables | 0.15 s / 0.00 s | |
+| self-certification.html | trafilatura / strip tags | 1 | 1,648 chars, 1 headings, 0 tables | 8,398 chars, 0 headings, 0 tables | 0.10 s / 0.00 s | |
+| recognition-page.html | trafilatura / strip tags | 3 | 6,691 chars, 6 headings, 0 tables | 20,843 chars, 0 headings, 0 tables | 0.20 s / 0.01 s | |
+| building-and-managing-a-business.html | trafilatura / strip tags | 1 | 967 chars, 0 headings, 0 tables | 6,992 chars, 0 headings, 0 tables | 0.15 s / 0.00 s | |
+| knowledge-bank.html | trafilatura / strip tags | 1 | 673 chars, 0 headings, 0 tables | 7,126 chars, 0 headings, 0 tables | 0.18 s / 0.00 s | |
+<!-- parsers:end -->
+
+### D07 · Parsing my corpus
+
+- Files in the manifest: 10 · parsed: 9 · failed: 0 · pages in Postgres: 69
+- Parsing coverage: 90% of files
+
+### Failures by reason
+
+| Reason | Files | What I did |
+|---|---|---|
+| | | |
+
+- The one I fixed: no failures to fix
+
+### What I saw when I read my parsed pages
+
+- A page where the heading path is right (document, page, path): recognition-page.html, page 2, ["DPIIT Recognition", "Apply for DPIIT Recognition"]
+- Something that came out wrong (document, page, what): startup-india/index.html returns only 46 chars via trafilatura — the page is JavaScript-rendered, so the main content is missing
+- A table: Markdown grid or loose text? (document, page): Tamil-Nadu-Startup-and-Innovation-Policy-2023.pdf, page 1 — Markdown grid with 4 tables found by PyMuPDF
+
+### My parser choice
+
+- For PDFs I use PyMuPDF because it extracts tables as Markdown (4 tables found vs 0 for pypdf) and detects headings from font size (208 headings vs 0 for pypdf on the TN policy PDF)
+- A kind of document in my corpus that neither parser handles well: startupindia.gov.in homepage — JavaScript-rendered, trafilatura finds only 46 chars
+
+### One thing that went wrong today, and how I fixed it
+
+- One manifest row (startup-india-scheme/startup-scheme.html) points to a missing file on disk. The file wasn't re-downloaded after the Day 6 source change; running `uv run python scripts/fetch.py urls` again will restore it via resume.
