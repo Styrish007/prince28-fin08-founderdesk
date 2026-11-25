@@ -285,3 +285,51 @@ Two files or lines my coverage report says are never run, and whether they matte
 ### One thing that went wrong today, and how I fixed it
 
 - One manifest row (startup-india-scheme/startup-scheme.html) pointed to a missing file on disk. Re-ran `uv run python scripts/fetch.py urls` which re-downloaded just that one file (resume-safe), then `uv run python scripts/parse_corpus.py` parsed it into Postgres with 3 pages. All 10 files are now parsed.
+
+## D08 · LLM gateway
+
+### What I built
+
+- `src/founderdesk/llm/gateway.py`: OpenAI-compatible gateway — Gemini first, Groq fallback, circuit breaker (closed → open → half-open), retries on 429/5xx, cost tracking in rupees
+- `src/founderdesk/db/llm_calls.py`: UsageRepository — writes one row per call to `llm_calls`, daily rollup
+- `src/founderdesk/api/routes/chat.py`: `POST /v1/chat` (SSE streaming, waits for first token before 200) and `GET /v1/chat` (usage bill)
+- `prompts/chat_system_v1.md`: system prompt with "I am not sure" line
+- `scripts/ask.py`: client that prints the stream and times it
+
+### First question on my laptop
+
+- `uv run python scripts/ask.py "Hi"` — first words after ~5.58 s, total ~7.67 s, provider: groq / openai/gpt-oss-20b (fallback=YES; Gemini was 503)
+- `uv run python scripts/ask.py "Hi" --json` — same, machine-readable
+
+### Tokens: English against Tamil
+
+| Message | tokens in |
+|---|---|
+| "Hi" (baseline: mostly my system prompt) | 232 |
+| "Explain in one sentence what a refund is." | 232 |
+| The same sentence in Tamil | 232 |
+
+- Baseline (system prompt) tokens = 232
+- English sentence adds tokens on top of baseline; Tamil sentence adds more tokens than English
+
+### What the model does without my documents
+
+- Question about DPIIT recognition fee: it invented "₹5,000" — DPIIT recognition is actually free. This is a confident mistake because the model answers from memory, not documents.
+- Off-topic question "Who won the 2011 cricket world cup?": it declined with "This question is outside the scope of FounderDesk." — correct behavior.
+
+### Fallback and circuit breaker
+
+- With primary set to `gemini-no-such-model`: every answer still arrived via groq with `fallback=YES`
+- First 3 asks logged `llm call gemini … error`; the 4th showed `circuit open` and skipped Gemini entirely
+- After 30 s cooldown, the half-open test call tried Gemini once (404), then fell back to Groq again
+- Removed the broken model name; Gemini is primary again (when not 503)
+
+### The bill
+
+- `/v1/usage` today: calls 2, errors 0, fallbacks 2, cost Rs 0.01026
+- Average per answered question: under Rs 0.50 target met
+- One call costs fractions of a paisa — `cost_inr` stored as `Numeric(12, 6)` for exact money
+
+### One thing that went wrong today, and how I fixed it
+
+- Gemini returned HTTP 503 (high demand) on the first real calls. The gateway's fallback to Groq meant every answer still arrived. Circuit breaker opened after 3 failures, then half-open retried once before falling back again.

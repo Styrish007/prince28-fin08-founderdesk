@@ -9,6 +9,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     MetaData,
+    Numeric,
     String,
     Text,
     UniqueConstraint,
@@ -103,4 +104,28 @@ class ParseFailure(Base):
     )
     last_attempt_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class LLMCall(Base):
+    """One LLM call: provider, model, tokens, cost, and whether it fell back."""
+
+    __tablename__ = "llm_calls"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    provider: Mapped[str] = mapped_column(String(40), index=True)
+    model: Mapped[str] = mapped_column(String(100))
+    status: Mapped[str] = mapped_column(String(20))  # "ok" or "error"
+    error: Mapped[str | None] = mapped_column(Text)
+    tokens_in: Mapped[int] = mapped_column(server_default="0")
+    tokens_out: Mapped[int] = mapped_column(server_default="0")
+    latency_ms: Mapped[int] = mapped_column(server_default="0")
+    cost_inr: Mapped[float] = mapped_column(Numeric(12, 6), server_default="0")
+    fallback_used: Mapped[bool] = mapped_column(server_default="false")
+    request_id: Mapped[str | None] = mapped_column(String(64), index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (
+        Index("ix_llm_calls_created_at", "created_at"),
+        Index("ix_llm_calls_request_id", "request_id"),
     )
