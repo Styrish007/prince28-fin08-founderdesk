@@ -1,9 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from founderdesk.api.deps import check_db, get_repo
+from founderdesk.api.deps import check_db, get_gateway, get_repo, get_usage_repo
 from founderdesk.api.main import create_app
 from founderdesk.config import Settings
+from founderdesk.llm.gateway import FakeLLM
 
 # Tiny fake records: unit tests never touch a real database or your data file.
 SAMPLE = [
@@ -64,6 +65,23 @@ class FakeRepo:
         return next((p for p in pages if p["page_no"] == page_no), None)
 
 
+class FakeUsage:
+    """Stand-in for UsageRepository in unit tests."""
+
+    def __init__(self):
+        self.totals = {
+            "calls": 0,
+            "errors": 0,
+            "fallbacks": 0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_inr": 0.0,
+        }
+
+    async def daily_totals(self, day=None):
+        return dict(self.totals)
+
+
 @pytest.fixture
 def settings():
     # _env_file=None: ignore your local .env so tests behave the same everywhere
@@ -76,9 +94,16 @@ def db_state():
 
 
 @pytest.fixture
-def client(settings, db_state):
+def llm():
+    return FakeLLM(replies=["this is a fake answer"])
+
+
+@pytest.fixture
+def client(settings, db_state, llm):
     app = create_app(settings)
     app.dependency_overrides[get_repo] = lambda: FakeRepo(SAMPLE)
     app.dependency_overrides[check_db] = lambda: db_state["up"]
+    app.dependency_overrides[get_gateway] = lambda: llm
+    app.dependency_overrides[get_usage_repo] = lambda: FakeUsage()
     with TestClient(app) as c:
         yield c

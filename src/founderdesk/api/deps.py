@@ -9,7 +9,9 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from founderdesk.config import Settings
+from founderdesk.db.llm_calls import UsageRepository
 from founderdesk.db.repository import DocumentRepository
+from founderdesk.llm.gateway import LLMGateway
 
 
 def get_app_settings(request: Request) -> Settings:
@@ -26,6 +28,14 @@ async def get_repo(session: Annotated[AsyncSession, Depends(get_session)]) -> Do
     return DocumentRepository(session)
 
 
+async def get_usage_repo(session: Annotated[AsyncSession, Depends(get_session)]) -> UsageRepository:
+    return UsageRepository(session)
+
+
+async def get_gateway(request: Request) -> LLMGateway:
+    return request.app.state.gateway
+
+
 async def check_db(request: Request) -> bool:
     """Can we run SELECT 1 within 2 seconds?"""
     try:
@@ -38,4 +48,6 @@ async def check_db(request: Request) -> bool:
 
 SettingsDep = Annotated[Settings, Depends(get_app_settings)]
 RepoDep = Annotated[DocumentRepository, Depends(get_repo)]
+UsageDep = Annotated[UsageRepository, Depends(get_usage_repo)]
+GatewayDep = Annotated[LLMGateway, Depends(get_gateway)]
 DbCheckDep = Annotated[bool, Depends(check_db)]
