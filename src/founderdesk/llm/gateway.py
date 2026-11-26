@@ -101,7 +101,19 @@ class OpenAICompatProvider:
         self.timeout = timeout
         self.last_usage: dict[str, int] | None = None
 
-    async def generate(self, messages: list[Message]) -> Reply:
+    @staticmethod
+    def _body(model: str, messages: list[Message], response_format: dict | None = None) -> dict:
+        body: dict = {
+            "model": model,
+            "messages": messages,
+            "temperature": 0,
+            "stream": False,
+        }
+        if response_format is not None:
+            body["response_format"] = response_format
+        return body
+
+    async def generate(self, messages: list[Message], response_format: dict | None = None) -> Reply:
         start = time.monotonic()
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
@@ -111,12 +123,7 @@ class OpenAICompatProvider:
                         "Authorization": f"Bearer {self.api_key}",
                         "Content-Type": "application/json",
                     },
-                    json={
-                        "model": self.model,
-                        "messages": messages,
-                        "temperature": 0,
-                        "stream": False,
-                    },
+                    json=self._body(self.model, messages, response_format),
                 )
         except httpx.TimeoutException as exc:
             raise LLMError(f"{self.name}: request timed out", retryable=True) from exc
@@ -343,6 +350,7 @@ class LLMGateway:
         messages: list[Message],
         stream: bool,
         request_id: str | None,
+        response_format: dict | None = None,
     ) -> Reply:
         breaker = self.breakers[provider.name]
         now = time.monotonic()
@@ -362,7 +370,7 @@ class LLMGateway:
                     # We don't know token counts from streaming unless provider reports them.
                     reply = Reply(text=text, latency_ms=int((time.monotonic() - now) * 1000))
                 else:
-                    reply = await provider.generate(messages)
+                    reply = await provider.generate(messages, response_format=response_format)
                     reply.latency_ms = int((time.monotonic() - now) * 1000)
                 breaker.record_success()
                 return reply
@@ -381,7 +389,12 @@ class LLMGateway:
                     breaker.record_failure(now)
         raise LLMError(last_error or f"{provider.name}: failed", retryable=False)
 
-    async def generate(self, messages: list[Message], request_id: str | None = None) -> Reply:
+    async def generate(
+        self,
+        messages: list[Message],
+        request_id: str | None = None,
+        response_format: dict | None = None,
+    ) -> Reply:
         """Try each provider in order: breaker check → up to 2 tries → next provider."""
         if not self.providers:
             raise LLMUnavailable("No LLM provider is configured")
@@ -394,7 +407,11 @@ class LLMGateway:
                 fallback_used = True
             try:
                 reply = await self._try_provider(
-                    provider, messages, stream=False, request_id=request_id
+                    provider,
+                    messages,
+                    stream=False,
+                    request_id=request_id,
+                    response_format=response_format,
                 )
                 self.last_provider = provider.name
                 self.last_model = provider.model
@@ -531,12 +548,19 @@ class FakeLLM:
         self.last_model: str | None = None
         self.last_fallback_used: bool = False
         self.last_usage: dict[str, int] | None = None
+        self.seen: list[list[dict[str, str]]] = []
 
     def set_replies(self, replies: list[str]) -> None:
         self.replies = replies
 
-    async def generate(self, messages: list[Message], request_id: str | None = None) -> Reply:
+    async def generate(
+        self,
+        messages: list[Message],
+        request_id: str | None = None,
+        response_format: dict | None = None,
+    ) -> Reply:
         self.call_count += 1
+        self.seen.append(messages)
         if self.fail:
             raise LLMUnavailable("FakeLLM is scripted to fail")
         text = self.replies[min(self.call_count - 1, len(self.replies) - 1)]

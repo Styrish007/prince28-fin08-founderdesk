@@ -1,7 +1,9 @@
 """Gateway tests: no network, no key, no bill. Uses FakeLLM throughout."""
 
 import asyncio
+import json
 import time
+from pathlib import Path
 
 import pytest
 
@@ -208,3 +210,46 @@ def test_gateway_stream_yields_chunks():
 
     asyncio.run(collect())
     assert "".join(chunks).strip() == "hello world"
+
+
+def test_gateway_passes_response_format():
+    """response_format is forwarded to the provider's generate call."""
+    seen: dict | None = None
+
+    class RecordingFake(FakeLLM):
+        async def generate(self, messages, request_id=None, response_format=None):
+            nonlocal seen
+            seen = response_format
+            return await super().generate(messages, request_id)
+
+    fake = RecordingFake(replies=["docs"], name="gemini", model="gemini-3.8-flash")
+    gw = LLMGateway(_settings_with_keys(), providers=[fake])
+    asyncio.run(
+        gw.generate(
+            [{"role": "user", "content": "hi"}],
+            response_format={"type": "json_object"},
+        )
+    )
+    assert seen == {"type": "json_object"}
+
+
+def test_repo_has_classify_versions():
+    """At least three classify_v*.md prompt files exist."""
+    prompts = Path("prompts")
+    versions = sorted(prompts.glob("classify_v*.md"))
+    assert len(versions) >= 3
+
+
+def test_testset_has_20_valid_lines():
+    """Test set has exactly 20 lines, valid JSON, valid labels, no TODO."""
+    path = Path("eval/prompt_testset.jsonl")
+    assert path.is_file()
+    lines = [line for line in path.read_text().splitlines() if line.strip()]
+    assert len(lines) == 20
+    valid_labels = {"docs", "personal", "off_topic"}
+    for line in lines:
+        obj = json.loads(line)
+        assert "question" in obj
+        assert "label" in obj
+        assert obj["label"] in valid_labels
+        assert "TODO" not in obj["question"]

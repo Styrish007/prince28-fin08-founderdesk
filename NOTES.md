@@ -333,3 +333,55 @@ Two files or lines my coverage report says are never run, and whether they matte
 ### One thing that went wrong today, and how I fixed it
 
 - Gemini returned HTTP 503 (high demand) on the first real calls. The gateway's fallback to Groq meant every answer still arrived. Circuit breaker opened after 3 failures, then half-open retried once before falling back again.
+
+## D09 · Prompt comparison
+
+| Version | Correct | Total | Accuracy |
+|---|---|---|---|
+| classify_v1 | 14 | 20 | 70% |
+| classify_v2 | 19 | 20 | 95% |
+| classify_v3 | 18 | 20 | 90% |
+| classify_v4 | 19 | 20 | 95% |
+
+Model calls made now: 20
+(the rest came from the cache) -> table in NOTES.md
+
+### What I changed in v4
+
+- Copied classify_v2 (best at 95%) to classify_v4
+- Added one sentence to the "personal" definition: "Also personal: questions about a specific individual's situation with an urgent timeline (e.g. 'my friend needs funding by next week')."
+- Result: still 19/20 (95%) — same as v2. The one miss (line 20, urgent funding question) stayed as docs. The clarification wasn't strong enough.
+
+### The question my best version still gets wrong
+
+- Line 20: "My friend's startup in Chennai needs Rs 10 lakh by next week - which scheme can approve it that fast?"
+- Wanted: personal · Got: docs
+- Why: it mentions "scheme" and "approve" which sound like documentation questions, but it's really about a specific person's urgent situation — live data no document contains.
+
+### A label in my test set that I changed after seeing the results
+
+- None — all 20 labels stood up to review.
+
+### Input tokens per question
+
+- v1: ~150 tokens (one-sentence prompt)
+- Best version (v2/v4): ~350 tokens (role + definitions + tags)
+- The extra ~200 tokens bought 25% accuracy (70% → 95%). Worth it.
+
+### My contract (DocMeta)
+
+- Fields I kept from my project card: scheme, authority, state, benefit_type
+- Fields I deleted: pages, single_answer, price (make no sense per document — a document covers many records)
+- The field I tightened: scheme — Literal["dpiit_recognition", "seed_fund", "tax_benefit", "state_policy", "other"] instead of free text
+
+### Extraction run
+
+- Prompt version: extract_v1 · documents: 8 ok, 2 failed (of 10 parsed)
+- Not finished? 2 documents remain: TN policy PDF (413 payload too large) and FAQ (rate limited on both free tiers)
+- Most common failure reason: "no model could answer" — both free tiers rate-limited
+- A record that was valid but wrong: none found yet
+- Cost at list price: Rs ~0.10 in total, Rs ~0.01 per document
+
+### One thing that went wrong today, and how I fixed it
+
+- Gemini returned 503/429 throughout the session. Groq picked up the fallback but also hit 429 rate limits and 413 payload-too-large on the TN policy PDF. The circuit breaker correctly skipped Gemini, and the extraction script is resumable — `--retry-failed` will pick up the 2 failures when rate limits reset.
