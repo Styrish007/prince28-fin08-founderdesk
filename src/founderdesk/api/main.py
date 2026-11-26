@@ -8,7 +8,7 @@ from fastapi import APIRouter, FastAPI
 
 from founderdesk.api.errors import register_error_handlers
 from founderdesk.api.middleware import request_context
-from founderdesk.api.routes import chat, documents, health
+from founderdesk.api.routes import chat, documents, health, usage
 from founderdesk.api.routes.chat import build_gateway, make_recorder
 from founderdesk.config import Settings, get_settings
 from founderdesk.db.session import make_engine, make_sessionmaker
@@ -50,6 +50,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     v1 = APIRouter(prefix="/v1")
     v1.include_router(documents.router)
     v1.include_router(chat.router)
+    v1.include_router(usage.router)
     app.include_router(health.router)
     app.include_router(v1)
     return app
