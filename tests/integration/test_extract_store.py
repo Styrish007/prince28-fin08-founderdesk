@@ -25,6 +25,7 @@ async def test_extracted_record_is_stored_in_document_metadata(session):
         external_id="extract-test-1",
         title="Test Document",
         doc_type="html",
+        sha256="00" * 32,
         metadata_={},
     )
     session.add(doc)
