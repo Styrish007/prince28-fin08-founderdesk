@@ -1,15 +1,10 @@
-"""POST /v1/chat (streaming answers) and GET /v1/usage (today's bill)."""
-
-from datetime import date
+"""POST /v1/chat (streaming answers)."""
 
 from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
-from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from founderdesk.api.deps import GatewayDep, SettingsDep, UsageDep
-from founderdesk.config import Settings
-from founderdesk.db.llm_calls import UsageRepository
+from founderdesk.api.deps import GatewayDep
 from founderdesk.llm.gateway import LLMGateway, LLMUnavailable
 
 router = APIRouter(prefix="/chat", tags=["chat"])
@@ -65,35 +60,27 @@ async def chat(
     return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 
-@router.get("")
-async def usage(
-    settings: SettingsDep,
-    usage_repo: UsageDep,
-) -> dict:
-    """Today's bill: calls, tokens, errors, fallbacks, rupees."""
-    totals = await usage_repo.daily_totals(date.today())
-    return totals
-
-
 def anext(ait):
     """Async next: Python 3.12 has a built-in, but keep this alias for clarity."""
     return __import__("builtins").anext(ait)
 
 
-def build_gateway(settings: Settings) -> LLMGateway:
+def build_gateway(settings) -> LLMGateway:
     """Build the LLM gateway from settings (used by main.py at start-up)."""
     from founderdesk.llm.gateway import LLMGateway
 
     return LLMGateway(settings)
 
 
-def make_recorder(sessionmaker: async_sessionmaker):
+def make_recorder(sessionmaker):
     """Build an async record() coroutine function that writes to Postgres.
 
     Opens its own session per call so it works from the gateway's background task.
     """
 
     async def record(payload: dict) -> None:
+        from founderdesk.db.llm_calls import UsageRepository
+
         async with sessionmaker() as session:
             repo = UsageRepository(session)
             await repo.record(payload)

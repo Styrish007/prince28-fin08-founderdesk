@@ -40,7 +40,7 @@ def test_chat_empty_message_is_422(client):
 
 def test_usage_returns_totals(client):
     """GET /v1/usage shows calls, tokens, errors, fallbacks, rupees."""
-    r = client.get("/v1/chat")
+    r = client.get("/v1/usage")
     assert r.status_code == 200
     body = r.json()
     for key in ("calls", "errors", "fallbacks", "tokens_in", "tokens_out", "cost_inr"):
