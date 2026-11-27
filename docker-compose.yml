@@ -37,7 +37,6 @@ services:
       APP_ENV: local
       DATABASE_URL: postgresql://app:app@db:5432/app  # pragma: allowlist secret
       REDIS_URL: redis://redis:6379  # pragma: allowlist secret
-      WORKER_IN_API: "false"  # pragma: allowlist secret
     depends_on:
       db:
         condition: service_healthy
