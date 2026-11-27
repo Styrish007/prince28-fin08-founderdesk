@@ -12,8 +12,8 @@ from founderdesk.db.session import make_engine, make_sessionmaker
 async def session(database_url):
     engine = make_engine(Settings(app_env="ci", database_url=database_url, _env_file=None))
     async with make_sessionmaker(engine)() as db:
-        await db.execute(IngestJob.__table__.delete())
         await db.execute(IngestItem.__table__.delete())
+        await db.execute(IngestJob.__table__.delete())
         await db.commit()
         yield db
     await engine.dispose()
