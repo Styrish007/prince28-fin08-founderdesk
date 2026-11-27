@@ -12,6 +12,7 @@ from founderdesk.api.deps import (
 )
 from founderdesk.api.main import create_app
 from founderdesk.config import Settings
+from founderdesk.ingest.fetch import ManifestRecord
 from founderdesk.llm.gateway import FakeLLM
 
 # Tiny fake records: unit tests never touch a real database or your data file.
@@ -222,7 +223,7 @@ class FakeManifest:
         self.entries = {}
 
     def values(self):
-        return self.entries.values()
+        return [ManifestRecord(**entry) for entry in self.entries.values()]
 
 
 @pytest.fixture
