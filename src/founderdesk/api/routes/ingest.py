@@ -25,7 +25,7 @@ async def ingest(
     """Queue one job per manifest document. Returns 202 Accepted immediately."""
     import uuid
 
-    records = [r for r in manifest.values() if r.get("status") == "downloaded"]
+    records = [r for r in manifest.values() if r.status == "downloaded"]
 
     job_id = str(uuid.uuid4())
     await job_repo.create_job(job_id=job_id, items_total=len(records))
@@ -34,7 +34,7 @@ async def ingest(
     for record in records:
         item = await job_repo.save_item(
             job_id=job_id,
-            path=record["path"],
+            path=record.path,
             status="queued",
         )
         item_ids.append(item.id)
