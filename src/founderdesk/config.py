@@ -45,6 +45,24 @@ class Settings(BaseSettings):
     # INR per USD for rupee cost display. Rs 95 on 22 Nov 2026.
     usd_inr: float = 95.0
 
+    # Ingestion backpressure: two documents at a time, twelve model calls a minute.
+    ingest_concurrency: int = 2
+    ingest_rpm: int = 12
+
+    # Job lock: a job silent for 60 seconds is offered again.
+    ingest_job_timeout: int = 60
+
+    # The worker runs inside the API on Render (free plan has no worker service).
+    # Stays false on your laptop.
+    worker_in_api: bool = False
+
+    # Admin token: required for POST /v1/ingest. Make a long random one.
+    admin_token: str = ""
+
+    # Redis: the job queue. On the laptop it's localhost:6379; on Render it's the
+    # internal URL of the Key Value service.
+    redis_url: str = "redis://localhost:6379"
+
     @field_validator("database_url")
     @classmethod
     def _asyncpg(cls, value: str) -> str:

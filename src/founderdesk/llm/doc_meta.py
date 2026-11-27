@@ -11,7 +11,18 @@ from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_vali
 Short = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=80)]
 Values = Annotated[list[Short], Field(default_factory=list, max_length=8)]
 Kind = Literal[
-    "guideline", "rule", "notice", "list", "report", "faq", "form", "tutorial", "reference", "other"
+    "guideline",
+    "rule",
+    "notice",
+    "list",
+    "report",
+    "faq",
+    "form",
+    "tutorial",
+    "reference",
+    "other",
+    "policy",
+    "webpage",
 ]
 
 Scheme = Literal["dpiit_recognition", "seed_fund", "tax_benefit", "state_policy", "other"]

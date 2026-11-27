@@ -207,10 +207,10 @@ class ManifestRecord:
     licence: str
     title: str
     path: str
-    sha256: str
-    size: int
-    fetched_at: str
-    status: str
+    sha256: str = ""
+    size: int = 0
+    fetched_at: str = ""
+    status: str = ""
 
 
 class Manifest:
@@ -278,6 +278,10 @@ class Manifest:
                 )
                 + "\n"
             )
+
+    def values(self):
+        self._load()
+        return self._entries.values()
 
 
 async def fetch_one(

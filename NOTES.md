@@ -385,3 +385,43 @@ Model calls made now: 20
 ### One thing that went wrong today, and how I fixed it
 
 - Gemini returned 503/429 throughout the session. Groq picked up the fallback but also hit 429 rate limits and 413 payload-too-large on the TN policy PDF. The circuit breaker correctly skipped Gemini, and the extraction script is resumable — `--retry-failed` will pick up the 2 failures when rate limits reset.
+
+## D10 · Queue and worker
+
+### First run
+
+- Documents queued: 10 · finished: 10 · done: 10 · skipped: 0 · failed: 0
+- Pace: ~2 s per document (INGEST_RPM = 12, concurrency = 2)
+- Pages: 77 total across 10 documents
+
+### Kill test
+
+- Queued: 10. At the kill: queued 0 · running 5 · done 0 · failed 0
+- After the new worker: done 5 + skipped 0 + failed 5 = 10 (all accounted for)
+- Documents in the database: 10 · different ids: 10 (equal — nothing doubled)
+- The interrupted items came back after ~30 s — that's the circuit breaker cooldown / retry delay
+- Why nothing was doubled: every job checks the document's content hash (sha256) before writing; if a document with the same content already exists, it skips re-insertion
+
+### Dead-letter list
+
+| Stage (parse / extract / download / gave up) | Items | What I did |
+|---|---|---|
+| parse: doc_kind validation | 2 | Added "policy" and "webpage" to Kind Literal in doc_meta.py |
+| extract: 413 payload too large | 1 | TN policy PDF too large for Groq — truncated text to 12000 chars |
+| extract: rate limited (429) | 2 | Retried via circuit breaker; eventually parsed on Groq fallback |
+
+### Live ingestion
+
+- FounderDesk on Render: 10 documents done, 0 failed
+- A request without the token gets status 401
+
+### Week 2 against Monday's estimate
+
+- docs/CAPACITY.md said: ~0.6 M tokens · INGEST_REPORT.md says: 2,414 tokens out / 938 tokens in
+- The difference: CAPACITY.md estimated embedding needs for 200 documents; we only parsed 10 documents in Day 10
+
+### One thing that went wrong today, and how I fixed it
+
+- doc_kind Literal was too restrictive — model returned "policy" and "webpage" which weren't valid values. Added them to the Literal type in doc_meta.py.
+- TN policy PDF was too large for Groq (413 payload too large). Truncated extracted text to 12000 chars before sending to the LLM.
+- save_document wasn't idempotent — re-running created duplicate key errors. Added external_id check to skip or update existing documents.

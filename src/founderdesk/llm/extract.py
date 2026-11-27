@@ -45,6 +45,9 @@ def _parse_json(text: str) -> dict | None:
         return None
 
 
+MAX_TEXT_CHARS = 12000  # truncate long documents to avoid provider payload limits
+
+
 async def extract(
     gateway: LLMGateway,
     document_text: str,
@@ -57,9 +60,12 @@ async def extract(
     ``MAX_ATTEMPTS``). Returns ``None`` if all attempts fail.
     """
 
+    # Truncate very long documents to avoid provider payload limits.
+    text = document_text[:MAX_TEXT_CHARS] if len(document_text) > MAX_TEXT_CHARS else document_text
+
     messages = [
         {"role": "system", "content": prompt},
-        {"role": "user", "content": document_text},
+        {"role": "user", "content": text},
     ]
 
     for _attempt in range(MAX_ATTEMPTS):
