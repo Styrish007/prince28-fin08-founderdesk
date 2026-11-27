@@ -129,3 +129,52 @@ class LLMCall(Base):
         Index("ix_llm_calls_created_at", "created_at"),
         Index("ix_llm_calls_request_id", "request_id"),
     )
+
+
+class IngestJob(Base):
+    """One ingestion job: a batch of documents queued together."""
+
+    __tablename__ = "ingest_jobs"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    status: Mapped[str] = mapped_column(
+        String(20), default="queued"
+    )  # queued, running, done, failed
+    items_total: Mapped[int] = mapped_column(default=0)
+    items_done: Mapped[int] = mapped_column(default=0)
+    items_failed: Mapped[int] = mapped_column(default=0)
+    items_skipped: Mapped[int] = mapped_column(default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    items: Mapped[list["IngestItem"]] = relationship(
+        back_populates="job", cascade="all, delete-orphan"
+    )
+
+
+class IngestItem(Base):
+    """One document inside one ingestion job."""
+
+    __tablename__ = "ingest_items"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    job_id: Mapped[str] = mapped_column(String(64), ForeignKey("ingest_jobs.id"), index=True)
+    path: Mapped[str] = mapped_column(Text, index=True)
+    status: Mapped[str] = mapped_column(
+        String(20), default="queued"
+    )  # queued, running, done, skipped, failed
+    attempts: Mapped[int] = mapped_column(default=0)
+    error: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    job: Mapped[IngestJob] = relationship(back_populates="items")
+
+    __table_args__ = (
+        Index("ix_ingest_items_job_id", "job_id"),
+        Index("ix_ingest_items_status", "status"),
+    )

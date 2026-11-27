@@ -8,9 +8,10 @@ from fastapi import APIRouter, FastAPI
 
 from founderdesk.api.errors import register_error_handlers
 from founderdesk.api.middleware import request_context
-from founderdesk.api.routes import chat, documents, health, usage
+from founderdesk.api.routes import chat, documents, health, ingest, usage
 from founderdesk.api.routes.chat import build_gateway, make_recorder
 from founderdesk.config import Settings, get_settings
+from founderdesk.db.ingest_jobs import IngestJobRepository
 from founderdesk.db.session import make_engine, make_sessionmaker
 from founderdesk.logging_setup import setup_logging
 
@@ -34,7 +35,22 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         logger.info("starting", extra={"status": settings.app_env})
+
+        # Optionally run the worker inside the API (Render free plan has no worker service).
+        if settings.worker_in_api:
+            from arq import create_pool
+
+            from founderdesk.workers.queue import redis_settings
+
+            pool = await create_pool(redis_settings(settings.redis_url))
+            async with sessionmaker() as session:
+                repo = IngestJobRepository(session)
+                items = await repo.claim_all_queued()
+                logger.info("worker ready, %d unfinished item(s) put back in the queue", len(items))
+            await pool.aclose()
+
         yield
+
         await engine.dispose()  # close every pooled connection on shutdown
 
     app = FastAPI(title=settings.app_name, version="0.2.0", lifespan=lifespan)
@@ -50,6 +66,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     v1 = APIRouter(prefix="/v1")
     v1.include_router(documents.router)
     v1.include_router(chat.router)
+    v1.include_router(ingest.router)
     v1.include_router(usage.router)
     app.include_router(health.router)
     app.include_router(v1)
