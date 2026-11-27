@@ -8,6 +8,7 @@ import asyncio
 import hashlib
 import logging
 import time
+from datetime import UTC, datetime
 from pathlib import Path
 
 import httpx
@@ -163,24 +164,28 @@ async def ingest_document(ctx, item_id: int) -> None:
 
     async with sessionmaker() as session:
         repo = IngestJobRepository(session)
-        # Count the start: mark this item as running.
-        item = await repo.claim_one()
-        if item is None or item.id != item_id:
-            # Another worker took it, or it's not ours anymore.
+        item = await repo.get_item(item_id)
+        if item is None or item.status != "queued":
             return
+
+        item.status = "running"
+        item.attempts = (item.attempts or 0) + 1
+        item.updated_at = datetime.now(UTC)
+        await session.flush()
 
         try:
             await process(item_id, item.path, session)
-            await repo.save_item(item.job_id, item.path, status="done")
+            item.status = "done"
             await session.commit()
             logger.info("done item=%s path=%s", item_id, item.path)
         except Permanent as exc:
-            await repo.save_item(item.job_id, item.path, status="failed", error=str(exc))
+            item.status = "failed"
+            item.error = str(exc)
             await session.commit()
             logger.warning("permanent item=%s path=%s error=%s", item_id, item.path, exc)
         except Exception as exc:
-            # Retryable: come back in 30 or 60 seconds.
-            await repo.save_item(item.job_id, item.path, status="queued", error=str(exc))
+            item.status = "queued"
+            item.error = str(exc)
             await session.commit()
             delay = 30.0 if item.attempts < 2 else 60.0
             logger.warning("retry item=%s path=%s error=%s in %ss", item_id, item.path, exc, delay)

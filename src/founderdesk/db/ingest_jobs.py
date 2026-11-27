@@ -1,6 +1,6 @@
 """All SQL for ingest jobs and items. Endpoints and workers never write SQL themselves."""
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,6 +20,9 @@ class IngestJobRepository:
 
     async def get_job(self, job_id: str) -> IngestJob | None:
         return await self.session.scalar(select(IngestJob).where(IngestJob.id == job_id))
+
+    async def get_item(self, item_id: int) -> IngestItem | None:
+        return await self.session.scalar(select(IngestItem).where(IngestItem.id == item_id))
 
     async def update_job(
         self,
@@ -63,13 +66,13 @@ class IngestJobRepository:
         from founderdesk.config import get_settings
 
         settings = get_settings()
-        cutoff = datetime.now(UTC) - __import__("timedelta", fromlist=["timedelta"]).timedelta(
-            seconds=settings.ingest_job_timeout
-        )
+        cutoff = datetime.now(UTC) - timedelta(seconds=settings.ingest_job_timeout)
         stmt = (
             select(IngestItem)
-            .where(IngestItem.status == "queued")
-            .where((IngestItem.updated_at.is_(None)) | (IngestItem.updated_at < cutoff))
+            .where(
+                (IngestItem.status == "queued")
+                | ((IngestItem.status == "running") & (IngestItem.updated_at < cutoff))
+            )
             .limit(1)
         )
         item = await self.session.scalar(stmt)
@@ -86,9 +89,7 @@ class IngestJobRepository:
         from founderdesk.config import get_settings
 
         settings = get_settings()
-        cutoff = datetime.now(UTC) - __import__("timedelta", fromlist=["timedelta"]).timedelta(
-            seconds=settings.ingest_job_timeout
-        )
+        cutoff = datetime.now(UTC) - timedelta(seconds=settings.ingest_job_timeout)
         stmt = select(IngestItem).where(
             (IngestItem.status == "queued")
             | ((IngestItem.status == "running") & (IngestItem.updated_at < cutoff))

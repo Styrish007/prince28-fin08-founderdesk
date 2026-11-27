@@ -279,6 +279,10 @@ class Manifest:
                 + "\n"
             )
 
+    def values(self):
+        self._load()
+        return self._entries.values()
+
 
 async def fetch_one(
     url: str,

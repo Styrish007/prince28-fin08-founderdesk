@@ -12,11 +12,15 @@ async def main() -> None:
     )
     parser.add_argument("--limit", type=int, default=0, help="ingest at most N documents")
     parser.add_argument("--url", default="http://localhost:8000", help="API base URL")
-    parser.add_argument("--admin-token", required=True, help="Admin token (X-Admin-Token header)")
+    parser.add_argument("--admin-token", default=None, help="Admin token (X-Admin-Token header)")
     parser.add_argument("--retry-failed", action="store_true", help="retry previously failed items")
     args = parser.parse_args()
 
-    headers = {"X-Admin-Token": args.admin_token}
+    from founderdesk.config import Settings
+
+    settings = Settings()
+    token = args.admin_token or settings.admin_token
+    headers = {"X-Admin-Token": token}
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         # Queue the ingestion.

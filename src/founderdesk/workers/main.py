@@ -2,21 +2,19 @@
 
 import logging
 
+from arq.connections import RedisSettings
+
 from founderdesk.config import get_settings
 from founderdesk.db.ingest_jobs import IngestJobRepository
 from founderdesk.db.session import make_engine, make_sessionmaker
 from founderdesk.workers.ingest import ingest_document
-from founderdesk.workers.queue import redis_settings
 
 logger = logging.getLogger("founderdesk.workers.main")
 
 
 class WorkerSettings:
     functions = [ingest_document]
-
-    @staticmethod
-    def redis_settings():
-        return redis_settings(get_settings().redis_url)
+    redis_settings = RedisSettings.from_dsn(get_settings().redis_url)
 
     async def startup(self):
         """Put every unfinished item back in the queue.
