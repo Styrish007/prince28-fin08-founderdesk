@@ -27,24 +27,53 @@ async def failed_paths(session: AsyncSession) -> set[str]:
 async def save_document(session: AsyncSession, record: dict, parsed: ParsedDoc) -> None:
     """One manifest record + its parsed pages -> documents and pages. Clears an old failure."""
     title = parsed.title or record.get("title") or Path(record["path"]).stem
-    document = Document(
-        external_id=document_id(record["sha256"]),
-        title=title[:500],
-        source_url=record["url"],
-        licence=(record.get("licence") or "")[:200],
-        doc_type=parsed.kind,
-        sha256=record["sha256"],
-        metadata_={
+    ext_id = document_id(record["sha256"])
+
+    existing = await session.scalar(select(Document).where(Document.external_id == ext_id))
+    if existing is not None:
+        # Update existing document (idempotent re-run)
+        existing.title = title[:500]
+        existing.source_url = record["url"]
+        existing.licence = (record.get("licence") or "")[:200]
+        existing.doc_type = parsed.kind
+        existing.sha256 = record["sha256"]
+        existing.metadata_ = {
             "source": record["source"],
             "path": record["path"],
             "parser": parsed.parser,
             "pages": len(parsed.pages),
             "tables": sum(p.tables for p in parsed.pages),
             "chars": sum(len(p.text) for p in parsed.pages),
-        },
-        pages=[Page(page_no=p.page_no, text=p.text, headings=p.headings) for p in parsed.pages],
-    )
-    session.add(document)
+        }
+        # Remove old pages and add new ones
+        await session.execute(delete(Page).where(Page.document_id == existing.id))
+        existing.pages = [
+            Page(
+                page_no=p.page_no,
+                text=p.text,
+                headings=p.headings,
+            )
+            for p in parsed.pages
+        ]
+    else:
+        document = Document(
+            external_id=ext_id,
+            title=title[:500],
+            source_url=record["url"],
+            licence=(record.get("licence") or "")[:200],
+            doc_type=parsed.kind,
+            sha256=record["sha256"],
+            metadata_={
+                "source": record["source"],
+                "path": record["path"],
+                "parser": parsed.parser,
+                "pages": len(parsed.pages),
+                "tables": sum(p.tables for p in parsed.pages),
+                "chars": sum(len(p.text) for p in parsed.pages),
+            },
+            pages=[Page(page_no=p.page_no, text=p.text, headings=p.headings) for p in parsed.pages],
+        )
+        session.add(document)
     await session.execute(delete(ParseFailure).where(ParseFailure.path == record["path"]))
     await session.commit()  # one transaction per file: a crash never leaves half a document
 
