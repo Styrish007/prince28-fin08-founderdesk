@@ -1,6 +1,6 @@
 # LLM Ingestion Report
 
-Generated: 2026-11-27 09:30:28 UTC
+Generated: 2026-11-27 09:50:10 UTC
 
 ## Corpus
 
@@ -20,7 +20,7 @@ Generated: 2026-11-27 09:30:28 UTC
 
 ## Dead-letter list
 
-- Items: 5
+- Items: 0
 
 ## What I learnt
 
